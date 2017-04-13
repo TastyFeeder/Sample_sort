@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     int n;
     FILE *fp1;
     FILE *fp2;
-    fp1 = fopen("source_text","w");
-    fp2 = fopen("sorted_text","w");
+    fp1 = fopen("source.txt","w");
+    fp2 = fopen("sorted.txt","w");
     A = (int *) malloc(sizeof(int) * ARRAYSIZE);
     srand((unsigned) time(NULL));
 

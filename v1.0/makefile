@@ -5,9 +5,9 @@ TARGET = sample_sort
 
 
 
-all: samplesort 
+all: samplesort.out gen.out 
 
-samplesort: main.o  $(OBJECT)
+samplesort.out: main.o  $(OBJECT)
 	$(CC) main.o $(OBJECT) -o $@ $(CFLAG)
 
 main.o :main.c
@@ -15,7 +15,7 @@ main.o :main.c
 $(OBJECT): $(OBJECT:.o=.c) $(OBJECT:.o=.h)
 	$(CC) -c $(OBJECT:.o=.c) $(CFLAGS)
 
-gen: gendata.c
+gen.out: gendata.c
 	$(CC) gendata.c -o $@ 
 clean:
 	rm *.o

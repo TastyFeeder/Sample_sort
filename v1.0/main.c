@@ -104,7 +104,7 @@ here will give thread number and array pointer
     else
         pointer = Target;
     FILE *of ;
-    of = fopen("sorted.txt","w");
+    of = fopen("mysorted.txt","w");
     for(i = 0 ; i < line; i++)
     {
         fprintf(of,"%d\n",pointer[i]);
