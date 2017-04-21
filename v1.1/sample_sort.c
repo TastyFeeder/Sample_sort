@@ -220,7 +220,11 @@ void findspliter(int *array, int *spliter,int count, int thread)
     }
     int tmp_index = 0;
     k = 0;
-
+    #pragma omp parallel for shared(array,index) private(i) 
+    for(i = 0 ; i < thread ; i++)
+    {
+        qsort(&array[i], index[i], sizeof(int), cmpfunc);
+    }
     for(i = 0 ; i < thread ; i++)
     {
         int bump_size = index[i]/thread;
