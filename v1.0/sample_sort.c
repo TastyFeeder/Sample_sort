@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <time.h>
 #include "sample_sort.h"
+#include <omp.h>
 #define DEBUG
 /*
 typedef struct thread_paras{
@@ -132,7 +133,7 @@ void samplesort(int *array, int *final_array, int count, int thread)
 
         }
         #ifdef DEBUG
-        printf("thread id = %d , from %d to %d\n",para_list[i].id, para_list[i].lower_value, para_list[i].upper_value);
+        printf("thread id = %d , from %d to %d (%d element)\n",para_list[i].id, para_list[i].lower_value, para_list[i].upper_value, para_list[i].upper_value - para_list[i].lower_value);
         #endif
     }
 
@@ -237,18 +238,27 @@ void findspliter(int *array, int *spliter,int count, int thread)
     index = (int *)malloc(sizeof(int) * (thread));
     tmp_spliter = (int *)malloc(sizeof(int) * (thread - 1) * thread);
     j = 0;
+    // make each bucket right now is uniform  right now  
     for(i = 0; i < count ; i += bucket_size)
     {
         if((i + 2*bucket_size) > count)
             bucket_size = count - i;
         // move qsort to different thread????
-        //qsort(&array[i], bucket_size, sizeof(int), cmpfunc);
+//        qsort(&array[i], bucket_size, sizeof(int), cmpfunc);
         index[j] = bucket_size;
         j++;
     }
+    #pragma omp  parallel for private(i,j)
+    for(i = 0 ; i < thread ; i++)
+    {
+        int sum=0;
+        for(j = 0; j<i;j++)
+            sum+=index[j];
+        qsort(&array[i+sum], index[i], sizeof(int), cmpfunc);
+    }
     int tmp_index = 0;
     k = 0;
-
+    // oversample by random (fix position)
     for(i = 0 ; i < thread ; i++)
     {
         int bump_size = index[i]/thread;
